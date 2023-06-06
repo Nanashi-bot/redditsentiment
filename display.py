@@ -14,20 +14,9 @@ st.write("Which stock would you like to analyse today?")
 
 # Text input
 name = st.text_input("Enter the company name", "")
-ticker = st.text_input("Enter the company ticker name", "")
-# ticker = ""
-# st.write("Would you like us to guess the company ticker or input it yourself?")
-# # Create two columns
-# col1, col2 = st.columns(2)
-# ticker=""
-# if col1.button('Yes'):
-#     # Action when Yes button is clicked
-#     ticker = ULTIMATEFINALPYTHONCODE.sym(name)
-#     st.write("Ticker name found to be: ",ticker)
-# elif col2.button('No'):
-#     # Action when No button is clicked
-#     ticker = st.text_input("Enter the company ticker", "")
-
+# ticker = st.text_input("Enter the company ticker name", "")
+ticker = ULTIMATEFINALPYTHONCODE.sym(name)
+st.write("Ticker name found to be: ",ticker)
 
 if st.button('Submit'):
     df = ULTIMATEFINALPYTHONCODE.scrape_reddit(name)
@@ -106,49 +95,14 @@ if st.button('Submit'):
     axx.set_ylabel('Total mentions')
     axx.set_title(f'Total mentions of {name} by day')
     st.pyplot(figx)
-    
+    # Convert the 'subreddit' column to string data type
+
+
+    df['subreddit'] = df['subreddit'].astype(str)
+    df['label'] = df['label'].replace({'LABEL_0': 'Negative', 'LABEL_1': 'Positive'})
+    st.dataframe(df.iloc[:, [1,7]])
+
 
 # Run the app
 # if __name__ == "__main__":
 #     st.run()
-
-# @st.cache
-# def get_UN_data():
-#     AWS_BUCKET_URL = "http://streamlit-demo-data.s3-us-west-2.amazonaws.com"
-#     df = pd.read_csv(AWS_BUCKET_URL + "/agri.csv.gz")
-#     return df.set_index("Region")
-
-# try:
-#     df = get_UN_data()
-#     countries = st.multiselect(
-#         "Choose countries", list(df.index), ["China", "United States of America"]
-#     )
-#     if not countries:
-#         st.error("Please select at least one country.")
-#     else:
-#         data = df.loc[countries]
-#         data /= 1000000.0
-#         st.write("### Gross Agricultural Production ($B)", data.sort_index())
-
-#         data = data.T.reset_index()
-#         data = pd.melt(data, id_vars=["index"]).rename(
-#             columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
-#         )
-#         chart = (
-#             alt.Chart(data)
-#             .mark_area(opacity=0.3)
-#             .encode(
-#                 x="year:T",
-#                 y=alt.Y("Gross Agricultural Product ($B):Q", stack=None),
-#                 color="Region:N",
-#             )
-#         )
-#         st.altair_chart(chart, use_container_width=True)
-# except URLError as e:
-#     st.error(
-#         """
-#         **This demo requires internet access.**
-#         Connection error: %s
-#     """
-#         % e.reason
-#     )

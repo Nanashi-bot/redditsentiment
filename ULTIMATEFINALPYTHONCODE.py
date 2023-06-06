@@ -97,7 +97,7 @@ def perform_sentiment_analysis(df):
     for index,x in enumerate(idfk):
         label.append(x[0]['label'])
         score.append(x[0]['score'])
-        if index%100==0:
+        if index%50==0:
             print("Finished doing sentiment analysis of ",index," post titles")
     df['label']=label
     df['score']=score
@@ -161,6 +161,6 @@ def stockdata(symbol="TSLA"):
 # My code
 # df =scrape_reddit("Tesla")
 # df_new,dfsent = perform_sentiment_analysis(df)
-print(sym("Alphabet"))
+# print(sym("Alphabet"))
 # df= stockdata("TSLA")
 # print(df)
