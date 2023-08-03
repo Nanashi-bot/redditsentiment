@@ -11,6 +11,9 @@ import numpy as np
 
 
 def sym(keyword):
+    a={'airtel':"BHARTARTL","gamestop":"GME","adani stock":"ADANIENT"}
+    if keyword.lower() in a.keys():
+        return a[keyword.lower()]
     # Set the API endpoint URL
     endpoint = "https://www.alphavantage.co/query"
     api="PWCXEB3R143MU162"
@@ -27,6 +30,17 @@ def sym(keyword):
     return symbols[0]
 
 
+# def getcomments(id):
+#     submission = reddit.submission(id=id)
+
+#     submission.comments.replace_more(limit=1)  # Retrieve all comments, including nested ones
+#     comments=[]
+#     for comment in submission.comments.list():
+#         # print(comment.body)
+#         comments.append(comment.body)
+#     print(len(comments))
+
+
 def scrape_reddit(search_query):
     secret= "xV3O4nwRdpRhkp-q3wQEqAPgr3c2sQ"
     appid = "9zVDXji3QYmrL6_ZhmenNw"
@@ -40,10 +54,6 @@ def scrape_reddit(search_query):
         "Title" : list(),
         "score": list(),
         # "num_comments" : list(),
-        # "url" : list(),
-        # "domain" : list(),
-        # "selftext":list(),
-        # "permalink" : list(),
         "id" : list(),
         "subreddit" : list(),
         "time_stamp" : list()
@@ -56,16 +66,11 @@ def scrape_reddit(search_query):
             data_dict["Title"].append(submission.title)
             data_dict["score"].append(submission.score)
             # data_dict["num_comments"].append(submission.num_comments)
-            # data_dict["url"].append(submission.url)
-            # data_dict["domain"].append(submission.domain)
-            # data_dict["selftext"].append(submission.selftext)
-            # data_dict["permalink"].append(submission.permalink)
             data_dict["id"].append(submission.id)
             data_dict["subreddit"].append(submission.subreddit)
             data_dict["time_stamp"].append(datetime.datetime.utcfromtimestamp(submission.created).strftime('%m-%d-%Y'))
             if index%50==0:
                 print("Finished searching through ",index," posts")
-
         return data_dict
     
     def get_dataframe(search_query):
