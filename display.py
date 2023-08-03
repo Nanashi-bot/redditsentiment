@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 
 plt.style.use('dark_background')
 # Add a title
-st.title("Sentiment Analysis app using reddit")
+st.title("SentiMint")
 
 # Add some text
 st.write("Which stock would you like to analyse today?")
@@ -35,8 +35,6 @@ if st.button('Submit'):
     # Rotate y-axis tick labels
     ax.tick_params(axis='x', labelrotation=45)
     st.pyplot(fig)
-    # fig_html = mpld3.fig_to_html(fig)
-    # components.html(fig_html, height=600)
     st.write("Stock trend analysed")
     #TILL HERE
 
@@ -62,11 +60,13 @@ if st.button('Submit'):
 
     # Adjust the spacing between subplots
     plt.tight_layout()
-
+    ax1.tick_params(axis='x', labelrotation=45)
+    ax2.tick_params(axis='x', labelrotation=45)
     # Display the subplots in Streamlit
     st.pyplot(fig0)
 
     figtog, axtog = plt.subplots()
+    axtog.tick_params(axis='x', labelrotation=45)
     # Plot the first line graph with 'Date' on the x-axis and 'Pos' on the y-axis
     axtog.plot(df_sent['Date'], df_sent['Pos'], color='green', label='Positive')
 
@@ -86,23 +86,41 @@ if st.button('Submit'):
 
     st.pyplot(figtog)
 
-
-
     added=df_sent['Negs']+df_sent['Pos']
     figx,axx = plt.subplots()
+    axx.tick_params(axis='x', labelrotation=45)
     axx.plot(df_sent['Date'], added, color='blue')
     axx.set_xlabel('Date')
     axx.set_ylabel('Total mentions')
     axx.set_title(f'Total mentions of {name} by day')
     st.pyplot(figx)
     # Convert the 'subreddit' column to string data type
-
-
-    df['subreddit'] = df['subreddit'].astype(str)
+    def filter_df(df, label_filter, search_query):
+        filtered_df = df[(df['label'] == label_filter) & (df['subreddit'].str.contains(search_query))]
+        return filtered_df
+    
     df['label'] = df['label'].replace({'LABEL_0': 'Negative', 'LABEL_1': 'Positive'})
-    st.dataframe(df.iloc[:, [1,7]])
-
-
+    num_neg = df['label'].value_counts()['Negative']
+    num_pos = df['label'].value_counts()['Positive']
+    def plot_pie_chart():
+        fig1, ax1 = plt.subplots()
+        labels = ['Negative', 'Positive']
+        sizes = [num_neg, num_pos]
+        colors = ['red', 'green']
+        explode = (0, 0.1)  # Explode the second slice (positive) for emphasis
+        ax1.pie(sizes, explode=explode, labels=labels, colors=colors,
+                autopct='%1.1f%%', startangle=90)
+        # plt.pie(sizes)
+        # Equal aspect ratio ensures that pie is drawn as a circle.
+        ax1.axis('equal')
+        plt.title('Distribution of Sentiment')
+        st.title("Sentiment Analysis")
+        st.pyplot(fig1)
+    plot_pie_chart()
+    
+    # Display filtered dataframe
+    st.dataframe(df.iloc[:, [1,4,7]]) 
+        
 # Run the app
 # if __name__ == "__main__":
 #     st.run()
