@@ -16,7 +16,7 @@ def sym(keyword):
         return a[keyword.lower()]
     # Set the API endpoint URL
     endpoint = "https://www.alphavantage.co/query"
-    api="PWCXEB3R143MU162"
+    api="XXXXXXXXXXXXXXXX"                                # Add own api token for alphavantage
     # # Set the API parameters
     params = {
         "function": "SYMBOL_SEARCH",
@@ -42,8 +42,8 @@ def sym(keyword):
 
 
 def scrape_reddit(search_query):
-    secret= "xV3O4nwRdpRhkp-q3wQEqAPgr3c2sQ"
-    appid = "9zVDXji3QYmrL6_ZhmenNw"
+    secret= "XXXXXXXXXXXXXXXX"            # Add own api token for reddit
+    appid = "XXXXXXXXXXXXXXXX"            # Add own api token for reddit
     reddit = praw.Reddit(client_id=appid,client_secret=secret,user_agent='scraper_api')
     print("Authentication is done.")
     sortsub = "hot"
@@ -136,7 +136,7 @@ def perform_sentiment_analysis(df):
 
 
 def stockdata(symbol="TSLA"):
-    api="PWCXEB3R143MU162"
+    api="XXXXXXXXXXXXXXXX"                        # Add own api token for alphavantage
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={symbol}&outputsize=full&apikey={api}'
 
     response = requests.get(url)
