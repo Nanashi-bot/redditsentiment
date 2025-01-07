@@ -1,0 +1,12 @@
+streamlit
+pandas
+matplotlib
+mpld3
+streamlit
+praw
+datetime
+torch
+requests
+json
+transformers
+numpy
